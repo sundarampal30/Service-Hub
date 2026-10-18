@@ -2,13 +2,15 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URL)
-        console.log("database is connected");
+        if (!process.env.MONGO_URL) {
+            throw new Error("MONGO_URL is missing from .env");
+        }
 
+        await mongoose.connect(process.env.MONGO_URL);
+        console.log("Database is connected");
     } catch (error) {
-        console.log("not connected");
-
-
+        console.error("Database connection failed:", error.message);
     }
-}
+};
+
 export default connectDB;
